@@ -18,6 +18,11 @@ set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
+find_package(MPI REQUIRED)
+if (NOT MPI_FOUND)
+  message(FATAL_ERROR "Unable to find MPI.")
+endif()
+
 if (ENABLE_TESTS)
   add_subdirectory(tests)
 endif()
