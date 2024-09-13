@@ -23,7 +23,7 @@ Do `build.sh --help` to see all the available configuration options.
 You can pass additional MPI flags to `CTest` by using the `--custom-mpiflags`
 option.
 ```sh
-./build.sh --custom-mpiflags "--use-hwthread-cpus"
+./build.sh --custom-mpiflags "--oversubscribe"
 ```
 
 # Run the tests
@@ -37,5 +37,6 @@ You can build and run the tests in a single go by doing:
 
 - You might have to set the `OMPI_CC` environment variable in case the MPI
   compiler can't find your C compiler.
-- Pass `--custom-mpiflags "--use-hwthread-cpus"` to `build.sh` if you want to
-  use more MPI processes than the physical cores available in your system.
+- Pass `--custom-mpiflags "--use-hwthread-cpus"` or
+  `--custom-mpiflags "--oversubscribe"` to `build.sh` if you want to use more
+  MPI processes than the physical cores available in your system.
