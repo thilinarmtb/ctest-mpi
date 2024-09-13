@@ -3,6 +3,8 @@ project(CTESTMPI VERSION 0.0.1 DESCRIPTION "" LANGUAGES C)
 
 option(ENABLE_TESTS "Enable unit tests" ON)
 
+set(CTESTMPI_CUSTOM_MPIFLAGS "" CACHE STRING "Pass custom MPI flags to CTest")
+
 # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
 # Use, i.e. don't skip the full RPATH for the build tree.
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)

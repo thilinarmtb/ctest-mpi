@@ -17,7 +17,7 @@ endfunction()
 
 function(add_test_mpi_0002_ranks test)
   add_test(NAME ${target}-mpi-0002 COMMAND
-    ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} 2
+    ${MPIEXEC_EXECUTABLE} ${CTESTMPI_CUSTOM_MPIFLAGS} ${MPIEXEC_NUMPROC_FLAG} 2
     ${CMAKE_INSTALL_PREFIX}/tests/${target})
 endfunction()
 

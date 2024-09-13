@@ -57,7 +57,7 @@ jobs:
       - name: Build and install ctestmpi
         id: install_ctestmpi
         run: |
-          ./build.sh
+          ./build.sh --custom-mpiflags "--use-hwthread-cpus"
       - name: Run ctestmpi tests
         id: run_ctestmpi_tests
         run: |

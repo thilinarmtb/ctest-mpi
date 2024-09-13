@@ -10,6 +10,7 @@ function print_help() {
   echo "  --build-dir <build directory> Set build directory."
   echo "  --install-prefix <install prefix> Set install prefix."
   echo "  --test Run the tests."
+  echo "  --custom-mpiflags <flags> Additional MPI flags to be passed into CTest."
 }
 
 : ${CTESTMPI_CC:=mpicc}
@@ -18,6 +19,7 @@ function print_help() {
 : ${CTESTMPI_BUILD_DIR:=`pwd`/build}
 : ${CTESTMPI_INSTALL_PREFIX:=`pwd`/install}
 : ${CTESTMPI_TEST:="no"}
+: ${CTESTMPI_CUSTOM_MPIFLAGS:=""}
 : ${CTESTMPI_LIB_SUFFIX:=".so"}
 
 while [[ $# -gt 0 ]]; do
@@ -55,6 +57,11 @@ while [[ $# -gt 0 ]]; do
       CTESTMPI_TEST="yes"
       shift
       ;;
+    --custom-mpiflags)
+      CTESTMPI_CUSTOM_MPIFLAGS="$2"
+      shift
+      shift
+      ;;
     *)
       echo "Error: Unknown option: $1"
       print_help
@@ -83,10 +90,18 @@ mkdir -p ${CTESTMPI_BUILD_DIR} 2> /dev/null
 CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD} -B ${CTESTMPI_BUILD_DIR}"
 
 if [[ ! -z "${CTESTMPI_BUILD_TYPE}" ]]; then
-  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD} -DCMAKE_BUILD_TYPE=${CTESTMPI_BUILD_TYPE}"
+  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD} -DCMAKE_BUILD_TYPE"
+  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD}=${CTESTMPI_BUILD_TYPE}"
 fi
+
 if [[ ! -z "${CTESTMPI_INSTALL_PREFIX}" ]]; then
-  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD} -DCMAKE_INSTALL_PREFIX=${CTESTMPI_INSTALL_PREFIX}"
+  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD} -DCMAKE_INSTALL_PREFIX"
+  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD}=${CTESTMPI_INSTALL_PREFIX}"
+fi
+
+if [[ ! -z "${CTESTMPI_CUSTOM_MPIFLAGS}" ]]; then
+  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD} -DCTESTMPI_CUSTOM_MPIFLAGS"
+  CTESTMPI_CMAKE_CMD="${CTESTMPI_CMAKE_CMD}=${CTESTMPI_CUSTOM_MPIFLAGS}"
 fi
 
 echo "cmake ${CTESTMPI_CMAKE_CMD}"
