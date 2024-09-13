@@ -9,6 +9,7 @@ function print_help() {
   echo "  --build-type <Release|Debug> Set build type."
   echo "  --build-dir <build directory> Set build directory."
   echo "  --install-prefix <install prefix> Set install prefix."
+  echo "  --test Run the tests."
 }
 
 : ${CTESTMPI_CC:=mpicc}
@@ -16,6 +17,7 @@ function print_help() {
 : ${CTESTMPI_BUILD_TYPE:=RelWithDebInfo}
 : ${CTESTMPI_BUILD_DIR:=`pwd`/build}
 : ${CTESTMPI_INSTALL_PREFIX:=`pwd`/install}
+: ${CTESTMPI_TEST:="no"}
 : ${CTESTMPI_LIB_SUFFIX:=".so"}
 
 while [[ $# -gt 0 ]]; do
@@ -47,6 +49,10 @@ while [[ $# -gt 0 ]]; do
     --install-prefix)
       CTESTMPI_INSTALL_PREFIX="$2"
       shift
+      shift
+      ;;
+    --test)
+      CTESTMPI_TEST="yes"
       shift
       ;;
     *)
@@ -87,3 +93,8 @@ echo "cmake ${CTESTMPI_CMAKE_CMD}"
 cmake ${CTESTMPI_CMAKE_CMD}
 
 cmake --build ${CTESTMPI_BUILD_DIR} --target install -j4
+
+if [[ "${CTESTMPI_TEST}" = "yes" ]]; then
+  cd ${CTESTMPI_BUILD_DIR}/tests && ctest
+  cd ${CTESTMPI_CURRENT_DIR}
+fi
