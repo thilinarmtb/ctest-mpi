@@ -1,0 +1,6 @@
+name: ctestmpi
+channels:
+  - conda-forge
+dependencies:
+  - cmake=3.24
+  - openmpi=5.0.5

@@ -1,0 +1,68 @@
+name: Unit tests
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: 'Run the build with tmate debugging enabled'
+        required: false
+        default: false
+env:
+  CTESTMPI_CONDA_ENV: /usr/share/miniconda/envs/ctestmpi
+  CTESTMPI_INSTALL_DIR: ${{ github.workspace }}/install
+  CTESTMPI_CACHE_NUMBER: 0 # Increase to reset cache manually.
+  POCL_CACHE_NUMBER: 0 # Increase to reset cache manually.
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      matrix:
+        compiler: [gcc-10]
+      fail-fast: false
+    name: "${{ matrix.compiler }}"
+    env:
+      OMPI_CC: ${{ matrix.compiler }}
+    steps:
+      - name: Setup GitHub actions
+        id: setup_github_actions
+        uses: actions/checkout@v3
+      - name: Setup tmate session
+        id: setup_tmate
+        uses: mxschmitt/action-tmate@v3.13
+        if: ${{ inputs.debug_enabled }}
+      - name: Setup conda environment
+        id: setup_conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: ctestmpi
+          use-mamba: false
+      - name: Cache conda environment
+        uses: actions/cache@v3
+        id: cache_conda_env
+        with:
+          path: ${{ env.CTESTMPI_CONDA_ENV }}
+          key:  conda-${{ runner.os }}-${{ hashFiles('environment.yml') }}-${{ hashFiles('requirements.txt') }}-${{ env.CTESTMPI_CACHE_NUMBER }}
+      - name: Update conda environment
+        id: update_conda_env
+        run: |
+          conda env update -n ctestmpi -f environment.yml
+        if: steps.cache.outputs.cache-hit != 'true'
+      - name: Build and install ctestmpi
+        id: install_ctestmpi
+        run: |
+          ./build.sh
+      - name: Run ctestmpi tests
+        id: run_ctestmpi_tests
+        run: |
+          ./build.sh --test
+      - name: Block to allow inspecting failures
+        id: block_to_test_github_ci
+        run: sleep 30m
+        if: ${{ failure() && inputs.debug_enabled }}
