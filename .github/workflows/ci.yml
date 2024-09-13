@@ -48,7 +48,7 @@ jobs:
         id: cache_conda_env
         with:
           path: ${{ env.CTESTMPI_CONDA_ENV }}
-          key:  conda-${{ runner.os }}-${{ hashFiles('environment.yml') }}-${{ hashFiles('requirements.txt') }}-${{ env.CTESTMPI_CACHE_NUMBER }}
+          key:  conda-${{ runner.os }}-${{ hashFiles('environment.yml') }}-${{ env.CTESTMPI_CACHE_NUMBER }}
       - name: Update conda environment
         id: update_conda_env
         run: |
