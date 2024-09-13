@@ -95,6 +95,9 @@ cmake ${CTESTMPI_CMAKE_CMD}
 cmake --build ${CTESTMPI_BUILD_DIR} --target install -j4
 
 if [[ "${CTESTMPI_TEST}" = "yes" ]]; then
-  cd ${CTESTMPI_BUILD_DIR}/tests && ctest
+  cd ${CTESTMPI_BUILD_DIR}/tests
+  ctest
+  return_value=$?
   cd ${CTESTMPI_CURRENT_DIR}
+  exit ${return_value}
 fi
