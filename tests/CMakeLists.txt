@@ -21,10 +21,17 @@ function(add_test_mpi_0002_ranks test)
     ${CMAKE_INSTALL_PREFIX}/tests/${target})
 endfunction()
 
+function(add_test_mpi_0004_ranks test)
+  add_test(NAME ${target}-mpi-0004 COMMAND
+    ${MPIEXEC_EXECUTABLE} ${CTESTMPI_CUSTOM_MPIFLAGS} ${MPIEXEC_NUMPROC_FLAG} 4
+    ${CMAKE_INSTALL_PREFIX}/tests/${target})
+endfunction()
+
 function(add_test_variants test)
   add_test_common(${test} target)
   add_test_serial(${target})
   add_test_mpi_0002_ranks(${target})
+  add_test_mpi_0004_ranks(${target})
 endfunction()
 
 file(GLOB TESTS *.c)
