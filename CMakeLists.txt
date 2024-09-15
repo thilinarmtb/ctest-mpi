@@ -7,9 +7,9 @@ set(CTESTMPI_CUSTOM_MPIFLAGS "" CACHE STRING "Pass custom MPI flags to CTest")
 
 # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
 # Use, i.e. don't skip the full RPATH for the build tree.
-set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
-# When building, don't use the install RPATH.
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
+# When building, don't use the install RPATH.
+set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 # Set the library location.
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 # Add the automatically determined parts of the RPATH which point to directories
