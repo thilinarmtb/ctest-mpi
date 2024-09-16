@@ -11,7 +11,7 @@ function(add_test_common test_w_path target)
   set(target ${test} PARENT_SCOPE)
 endfunction()
 
-function(add_test_mpi_0001 target)
+function(add_test_mpi_0001_ranks target)
   add_test(NAME ${target} COMMAND ${CMAKE_INSTALL_PREFIX}/tests/${target})
 endfunction()
 
@@ -29,7 +29,7 @@ endfunction()
 
 function(add_test_variants test)
   add_test_common(${test} target)
-  add_test_mpi_0001(${target})
+  add_test_mpi_0001_ranks(${target})
   add_test_mpi_0002_ranks(${target})
   add_test_mpi_0004_ranks(${target})
 endfunction()
